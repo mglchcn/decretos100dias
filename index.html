@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -29,8 +29,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-amber-600 text-white flex items-center justify-center rounded font-bold serif"> </div>
-                    <span class="text-xl font-bold serif tracking-tight">CEN<span class="text-amber-600">GOB</span></span>
+                    <img src="Logotipo CenGOB v2.png" alt="Logotipo CenGOB" class="h-10 w-auto">
                 </div>
                 <div class="flex gap-4">
                     <button onclick="exportAllToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-1.5 px-3 rounded transition">
@@ -68,8 +67,7 @@
                         La narrativa opositora que acusa al actual Presidente <strong>Rodrigo Paz Pereira</strong> de gobernar mediante abusos de Decretos Supremos queda completamente desestimada al revisar los correlativos históricos que se encuentran en la Gaceta Oficial del Estado.
                     </p>
                     <p class="text-slate-700 mb-4 text-sm leading-relaxed">
-                        Con <strong>60 decretos</strong> en sus primeros 100 días, la gestión de Rodrigo Paz es <strong>la segunda más baja de los últimos 40 años</strong>. Las cifras demuestran que 4 presidentes pasaron los 100 decretos en los primeros 100 días de gobierno, como <strong>Carlos Mesa (113)</strong>, <strong>Jorge Quiroga (111)</strong>, <strong>Evo Morales (103)</strong> y <strong>Víctor Paz (101)</strong> emitiendo prácticamente el doble de normativa por vía ejecutiva en el mismo lapso de tiempo.
-                    </p>
+                        Con <strong>60 decretos</strong> en sus primeros 100 días, la gestión de Rodrigo Paz es <strong>la segunda más baja de los últimos 40 años</strong>. Las cifras demuestran que 4 presidentes pasaron los 100 decretos en los primeros 100 días de gobierno, como <strong>Carlos Mesa (113)</strong>, <strong>Jorge Quiroga (111)</strong>, <strong>Evo Morales (103)</strong> y <strong>Víctor Paz (101)</strong> emitiendo prácticamente el doble de normativa por vía ejecutiva en el mismo lapso de tiempo.                    </p>
                 </div>
                 
                 <div class="lg:col-span-2 p-6 md:p-8" id="capture-area">
@@ -158,13 +156,19 @@
                         datalabels: { 
                             anchor: 'end', 
                             align: 'top', 
-                            font: { weight: 'bold', size: 16 },
+                            offset: 5,
                             formatter: (value) => value,
+                            font: function(context) {
+                                const val = context.dataset.data[context.dataIndex];
+                                if (val > 100 || val === 60) {
+                                    return { weight: 'bold', size: 16 };
+                                }
+                                return { weight: 'normal', size: 12 };
+                            },
                             color: function(context) {
                                 const val = context.dataset.data[context.dataIndex];
-                                // Valores > 100 en Rojo, 60 en Verde
-                                if (val > 100) return '#ef4444';
-                                if (val === 60) return '#10b981';
+                                if (val > 100) return '#ef4444'; // Rojo
+                                if (val === 60) return '#10b981'; // Verde
                                 return '#1e293b';
                             }
                         }
