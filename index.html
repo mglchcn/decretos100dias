@@ -3,180 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparativa Histórica: 40 Años de Decretos Supremos</title>
+    <title>Gaceta Analítica: Reporte de Decretos 1985-2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Roboto', sans-serif; background-color: #f8fafc; color: #0f172a; }
-        h1, h2, h3, h4, .serif { font-family: 'Merriweather', serif; }
-        .chart-container-macro { position: relative; width: 100%; max-width: 1000px; margin: 0 auto; height: 400px; }
-        .president-btn.active { background-color: #f1f5f9; border-bottom: 3px solid currentColor; font-weight: 700; }
+        body { font-family: 'Roboto', sans-serif; background-color: #f1f5f9; color: #0f172a; }
+        h1, h2, h3, .serif { font-family: 'Merriweather', serif; }
+        .chart-container-macro { position: relative; width: 100%; height: 450px; }
+        .president-btn.active { background-color: #f8fafc; border-bottom: 3px solid currentColor; font-weight: 700; opacity: 1; }
+        .president-btn { opacity: 0.6; transition: all 0.2s; }
         .scroll-hide-bar::-webkit-scrollbar { height: 6px; }
-        .scroll-hide-bar::-webkit-scrollbar-track { background: #f1f5f9; }
         .scroll-hide-bar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
 <body class="antialiased">
 
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-amber-600 text-white flex items-center justify-center rounded font-bold serif">CH</div>
-                    <span class="text-xl font-bold serif tracking-tight">Comparativa<span class="text-amber-600">Histórica</span></span>
-                </div>
-                <div class="hidden sm:block text-xs text-slate-500 uppercase tracking-widest font-semibold">Datos Oficiales 1985 — 2026</div>
+        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-amber-600 text-white flex items-center justify-center rounded font-bold serif">GA</div>
+                <span class="text-xl font-bold serif">Gaceta<span class="text-amber-600">Analítica</span></span>
             </div>
+            <button onclick="exportAllToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-4 rounded transition flex items-center gap-2">
+                📥 Descargar Base de Datos (Excel)
+            </button>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-10">
 
-        <section class="text-center max-w-4xl mx-auto space-y-4 pt-4">
-            <span class="text-amber-600 font-bold tracking-wider uppercase text-sm">Decretos en los primeros 100 Días</span>
-            <h1 class="text-3xl md:text-5xl font-bold leading-tight serif">Los datos desmienten la especulación</h1>
-            <p class="text-lg text-slate-600">Comparativa de decretos emitidos en los Primeros 100 Días de Gobierno (Últimos 40 años)</p>
-        </section>
+        <header class="text-center max-w-3xl mx-auto space-y-4">
+            <h1 class="text-3xl md:text-5xl font-bold serif text-slate-900">Análisis Comparativo de Decretos Supremos</h1>
+            <p class="text-slate-600">Visualización de datos oficiales sobre la emisión de normativa ejecutiva en los primeros 100 días de gestión (1985 — 2026).</p>
+        </header>
 
-        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 lg:p-10">
-            <div class="flex justify-between items-end mb-6">
-                <h3 class="text-xl font-bold text-slate-800 italic">Total de Decretos en Primeros 100 Días</h3>
-                <span class="text-xs text-slate-500 uppercase font-bold">Correlativo Gaceta Oficial</span>
+        <section class="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 md:p-10">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-800">Volumen Histórico de Decretos</h3>
+                    <p class="text-slate-500 text-sm italic">Cifra total por mandatario en su periodo inicial</p>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-bold uppercase text-slate-400">
+                    <span class="w-3 h-3 bg-amber-500 rounded-full"></span> Rodrigo Paz (Actual)
+                </div>
             </div>
             <div class="chart-container-macro">
                 <canvas id="macroChart"></canvas>
             </div>
         </section>
 
-         <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-3">
-                <!-- Text Analysis -->
-                <div class="p-6 lg:p-8 bg-amber-50/50 border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col justify-center">
-                    <h2 class="text-2xl font-bold serif mb-4 text-slate-900">La Matemática Desmiente la Política</h2>
-                    <p class="text-slate-700 mb-4 text-sm leading-relaxed">
-                        La narrativa opositora que acusa al actual Presidente <strong>Rodrigo Paz Pereira</strong> de gobernar mediante abusos de Decretos Supremos queda completamente desestimada al revisar los correlativos históricos que se encuentran en la Gaceta Ofiacial del Estado.
-                    </p>
-                    <p class="text-slate-700 mb-4 text-sm leading-relaxed">
-                        Con <strong>60 decretos</strong> en sus primeros 100 días, la gestión de Rodrigo Paz es <strong>la segunda más baja de los últimos 40 años</strong>. Las cifras demuestran que presidentes como <strong>Carlos Mesa (113)</strong>, <strong>Jorge Quiroga (111)</strong>, <strong>Evo Morales (103)</strong> y <strong>Víctor Paz (101)</strong> emitieron prácticamente el doble de normativa por vía ejecutiva en el mismo lapso de tiempo.
-                    </p>
-                    <!-- <div class="bg-white p-4 rounded-lg border border-amber-200 shadow-sm mt-2">
-                        <span class="block text-xs text-amber-800 font-bold uppercase mb-1">El Dato Duro</span>
-                        <span class="text-sm text-slate-800">Incluso presidentes de transición reciente como <strong>Jeanine Áñez (81)</strong> o mandatarios que gozaban de mayoría legislativa absoluta como <strong>Luis Arce (75)</strong>, recurrieron al decreto con mucha mayor frecuencia que la actual administración.</span>
-                    </div> -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <aside class="bg-amber-50 p-8 rounded-2xl border border-amber-100 flex flex-col justify-center">
+                <h2 class="text-2xl font-bold serif mb-4 text-amber-900">La Evidencia del Correlativo</h2>
+                <p class="text-slate-700 mb-6 text-sm leading-relaxed">
+                    Contrario a la narrativa de "abuso de decretos", los datos demuestran que la gestión de <strong>Rodrigo Paz Pereira</strong> (60 decretos) mantiene una de las frecuencias normativas más bajas desde el retorno a la democracia. 
+                </p>
+                <div class="p-4 bg-white rounded-xl border border-amber-200 text-xs text-slate-600 italic">
+                    "Gobernar por decreto fue la norma en crisis pasadas; hoy la cifra refleja un orden administrativo técnico."
                 </div>
-               
-        
-        <section class="space-y-6" id="explorer">
-            <div class="text-center mb-4">
-                <h2 class="text-2xl font-bold serif text-slate-900">Ficha Técnica por Mandatario</h2>
-            </div>
+            </aside>
 
-            <div class="flex overflow-x-auto scroll-hide-bar border-b border-slate-300 pb-1 gap-2" id="president-selectors"></div>
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden" id="capture-area">
+                <div class="p-4 bg-slate-50 border-b flex justify-between items-center">
+                    <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Ficha Técnica Individual</h3>
+                    <button onclick="exportToPDF()" class="text-amber-600 hover:text-amber-700 text-xs font-bold flex items-center gap-1">
+                        PDF 📄
+                    </button>
+                </div>
+                
+                <div class="p-6">
+                    <div class="flex overflow-x-auto scroll-hide-bar border-b mb-6 pb-2 gap-4" id="president-selectors"></div>
 
-            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 md:p-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    
-                    <div>
-                        <span id="detail-period" class="text-xs font-bold tracking-widest uppercase"></span>
-                        <h3 id="detail-name" class="text-3xl font-bold serif text-slate-900 mt-1 mb-6"></h3>
-                        
-                        <div class="bg-slate-50 border border-slate-200 rounded-lg p-6 space-y-4">
-                            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                                <span class="text-lg font-semibold text-slate-600">Total 100 Días:</span>
-                                <span id="detail-count" class="text-4xl font-black"></span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                        <div class="space-y-6">
+                            <div>
+                                <span id="detail-period" class="text-xs font-bold uppercase tracking-tighter p-1 rounded"></span>
+                                <h3 id="detail-name" class="text-3xl font-bold serif text-slate-900 mt-2"></h3>
                             </div>
+                            
                             <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <span class="block text-xs text-slate-500 uppercase">Desde</span>
-                                    <span id="detail-start-date" class="block font-bold text-slate-800"></span>
-                                    <span id="detail-start-ds" class="text-xs text-slate-600 bg-white border px-1 rounded"></span>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <span class="text-3xl font-black block" id="detail-count"></span>
+                                    <span class="text-[10px] text-slate-400 font-bold uppercase">Decretos Totales</span>
                                 </div>
-                                <div>
-                                    <span class="block text-xs text-slate-500 uppercase">Hasta</span>
-                                    <span id="detail-end-date" class="block font-bold text-slate-800"></span>
-                                    <span id="detail-end-ds" class="text-xs text-slate-600 bg-white border px-1 rounded"></span>
+                                <div class="p-4 flex flex-col justify-center">
+                                    <span class="text-xs text-slate-500 font-bold">Rango de Correlativos:</span>
+                                    <span id="detail-start-ds" class="text-xs font-mono text-slate-800"></span>
+                                    <span class="text-xs text-slate-400">al</span>
+                                    <span id="detail-end-ds" class="text-xs font-mono text-slate-800"></span>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="flex flex-col items-center justify-center">
-                        <h4 class="text-sm font-bold text-slate-700 mb-4 uppercase">Distribución Temática</h4>
-                        <div style="height: 250px; width: 100%;">
-                            <canvas id="donutChart"></canvas>
+                        <div class="flex flex-col items-center">
+                            <div style="height: 220px; width: 100%;">
+                                <canvas id="donutChart"></canvas>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-        </section>
+        </div>
     </main>
 
     <script>
-        // Registro del plugin para mostrar valores
         Chart.register(ChartDataLabels);
 
         const db = {
-            vpaz: { id: 'vpaz', name: 'Víctor Paz Estenssoro', period: '1985', count: 101, start: '06-08-1985', startDs: 'DS 21045', end: '14-11-1985', endDs: 'DS 21146', color: '#db2777', textClass: 'text-pink-700', distribution: [80, 5, 15] },
-            jpaz: { id: 'jpaz', name: 'Jaime Paz Zamora', period: '1989', count: 68, start: '06-08-1989', startDs: 'DS 22292', end: '14-11-1989', endDs: 'DS 22360', color: '#2563eb', textClass: 'text-blue-700', distribution: [50, 20, 30] },
-            goni93: { id: 'goni93', name: 'G. Sánchez de Lozada', period: '1993', count: 46, start: '06-08-1993', startDs: 'DS 23623', end: '14-11-1993', endDs: 'DS 23669', color: '#1d4ed8', textClass: 'text-blue-800', distribution: [40, 20, 40] },
-            banzer: { id: 'banzer', name: 'Hugo Banzer Suárez', period: '1997', count: 89, start: '06-08-1997', startDs: 'DS 24811', end: '14-11-1997', endDs: 'DS 24900', color: '#dc2626', textClass: 'text-red-600', distribution: [30, 20, 50] },
-            quiroga: { id: 'quiroga', name: 'Jorge Quiroga Ramírez', period: '2001', count: 111, start: '07-08-2001', startDs: 'DS 26277', end: '15-11-2001', endDs: 'DS 26388', color: '#b91c1c', textClass: 'text-red-700', distribution: [45, 15, 40] },
-            goni02: { id: 'goni02', name: 'G. Sánchez de Lozada', period: '2002', count: 89, start: '06-08-2002', startDs: 'DS 26753', end: '14-11-2002', endDs: 'DS 26842', color: '#1e3a8a', textClass: 'text-blue-900', distribution: [50, 30, 20] },
-            mesa: { id: 'mesa', name: 'Carlos Mesa Gisbert', period: '2003', count: 113, start: '17-10-2003', startDs: 'DS 27212', end: '25-01-2004', endDs: 'DS 27325', color: '#7c3aed', textClass: 'text-violet-600', distribution: [40, 25, 35] },
-            rodriguez: { id: 'rodriguez', name: 'Eduardo Rodríguez V.', period: '2005', count: 99, start: '09-06-2005', startDs: 'DS 28200', end: '17-09-2005', endDs: 'DS 28299', color: '#8b5cf6', textClass: 'text-violet-500', distribution: [20, 10, 70] },
-            morales: { id: 'morales', name: 'Evo Morales Ayma', period: '2006', count: 103, start: '22-01-2006', startDs: 'DS 28600', end: '02-05-2006', endDs: 'DS 28703', color: '#059669', textClass: 'text-emerald-600', distribution: [35, 40, 25] },
-            anez: { id: 'anez', name: 'Jeanine Áñez Chávez', period: '2019', count: 81, start: '12-11-2019', startDs: 'DS 4076', end: '20-02-2020', endDs: 'DS 4157', color: '#a855f7', textClass: 'text-purple-500', distribution: [20, 15, 65] },
-            arce: { id: 'arce', name: 'Luis Arce Catacora', period: '2020', count: 75, start: '08-11-2020', startDs: 'DS 4389', end: '16-02-2021', endDs: 'DS 4464', color: '#10b981', textClass: 'text-emerald-500', distribution: [40, 30, 30] },
-            rpaz: { id: 'rpaz', name: 'Rodrigo Paz Pereira', period: '2025/2026', count: 60, start: '08-11-2025', startDs: 'DS 5486', end: '16-02-2026', endDs: 'DS 5546', color: '#d97706', textClass: 'text-amber-600', distribution: [40, 15, 45] }
+            vpaz: { id: 'vpaz', name: 'Víctor Paz Estenssoro', period: '1985', count: 101, startDs: 'DS 21045', endDs: 'DS 21146', color: '#db2777', distribution: [80, 5, 15] },
+            jpaz: { id: 'jpaz', name: 'Jaime Paz Zamora', period: '1989', count: 68, startDs: 'DS 22292', endDs: 'DS 22360', color: '#2563eb', distribution: [50, 20, 30] },
+            goni93: { id: 'goni93', name: 'Gonzalo Sánchez de Lozada', period: '1993', count: 46, startDs: 'DS 23623', endDs: 'DS 23669', color: '#1d4ed8', distribution: [40, 20, 40] },
+            banzer: { id: 'banzer', name: 'Hugo Banzer Suárez', period: '1997', count: 89, startDs: 'DS 24811', endDs: 'DS 24900', color: '#dc2626', distribution: [30, 20, 50] },
+            quiroga: { id: 'quiroga', name: 'Jorge Quiroga Ramírez', period: '2001', count: 111, startDs: 'DS 26277', endDs: 'DS 26388', color: '#b91c1c', distribution: [45, 15, 40] },
+            goni02: { id: 'goni02', name: 'Gonzalo Sánchez de Lozada', period: '2002', count: 89, startDs: 'DS 26753', endDs: 'DS 26842', color: '#1e3a8a', distribution: [50, 30, 20] },
+            mesa: { id: 'mesa', name: 'Carlos Mesa Gisbert', period: '2003', count: 113, startDs: 'DS 27212', endDs: 'DS 27325', color: '#7c3aed', distribution: [40, 25, 35] },
+            rodriguez: { id: 'rodriguez', name: 'Eduardo Rodríguez Veltzé', period: '2005', count: 99, startDs: 'DS 28200', endDs: 'DS 28299', color: '#8b5cf6', distribution: [20, 10, 70] },
+            morales: { id: 'morales', name: 'Evo Morales Ayma', period: '2006', count: 103, startDs: 'DS 28600', endDs: 'DS 28703', color: '#059669', distribution: [35, 40, 25] },
+            anez: { id: 'anez', name: 'Jeanine Áñez Chávez', period: '2019', count: 81, startDs: 'DS 4076', endDs: 'DS 4157', color: '#a855f7', distribution: [20, 15, 65] },
+            arce: { id: 'arce', name: 'Luis Arce Catacora', period: '2020', count: 75, startDs: 'DS 4389', endDs: 'DS 4464', color: '#10b981', distribution: [40, 30, 30] },
+            rpaz: { id: 'rpaz', name: 'Rodrigo Paz Pereira', period: '2025/2026', count: 60, startDs: 'DS 5486', endDs: 'DS 5546', color: '#d97706', distribution: [40, 15, 45] }
         };
 
-        const presidentOrder = ['vpaz', 'jpaz', 'goni93', 'banzer', 'quiroga', 'goni02', 'mesa', 'rodriguez', 'morales', 'anez', 'arce', 'rpaz'];
+        const presidentOrder = Object.keys(db);
         let donutChartInstance = null;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderMacroChart();
-            buildSelectors();
-            updateDetailView('rpaz');
-        });
 
         function renderMacroChart() {
             const ctx = document.getElementById('macroChart').getContext('2d');
-            const labels = presidentOrder.map(id => {
-                const p = db[id];
-                return id === 'rpaz' ? 'R. PAZ (Hoy)' : p.name.split(' ')[0] + (id.includes('goni') ? ' ('+p.period.slice(-2)+')' : '');
-            });
-
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: labels,
+                    labels: presidentOrder.map(id => db[id].name),
                     datasets: [{
                         data: presidentOrder.map(id => db[id].count),
                         backgroundColor: presidentOrder.map(id => db[id].color + 'CC'),
                         borderColor: presidentOrder.map(id => db[id].color),
                         borderWidth: 2,
-                        borderRadius: 5
+                        borderRadius: 8
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        datalabels: { // Configuración de valores sobre barras
-                            anchor: 'end',
-                            align: 'top',
-                            color: '#1e293b',
-                            font: { weight: 'bold', size: 12 }
-                        }
+                        datalabels: { anchor: 'end', align: 'top', color: '#475569', font: { weight: 'bold' } }
                     },
                     scales: {
-                        y: { beginAtZero: true, grid: { display: false }, ticks: { display: false } },
-                        x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } }
+                        y: { display: false },
+                        x: { ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 45 } }
                     }
                 }
             });
@@ -185,12 +165,11 @@
         function buildSelectors() {
             const container = document.getElementById('president-selectors');
             presidentOrder.forEach(id => {
-                const p = db[id];
                 const btn = document.createElement('button');
-                btn.className = `president-btn flex-shrink-0 px-4 py-3 text-sm transition-all focus:outline-none`;
-                btn.style.color = p.color;
+                btn.className = `president-btn flex-shrink-0 px-4 py-2 text-xs focus:outline-none`;
+                btn.style.color = db[id].color;
                 btn.id = `btn-${id}`;
-                btn.innerHTML = `<span class="block font-bold">${p.name.split(' ')[0]}</span><span class="block text-xs opacity-75">${p.period}</span>`;
+                btn.innerHTML = `<span class="block font-bold">${db[id].name.split(' ')[0]}</span><span class="text-[10px]">${db[id].period}</span>`;
                 btn.onclick = () => updateDetailView(id);
                 container.appendChild(btn);
             });
@@ -199,18 +178,17 @@
         function updateDetailView(id) {
             const data = db[id];
             document.querySelectorAll('.president-btn').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.getElementById(`btn-${id}`);
-            activeBtn.classList.add('active');
-            activeBtn.style.borderBottomColor = data.color;
+            document.getElementById(`btn-${id}`).classList.add('active');
 
-            document.getElementById('detail-period').innerText = `Gestión ${data.period}`;
-            document.getElementById('detail-period').style.color = data.color;
+            const pTag = document.getElementById('detail-period');
+            pTag.innerText = `Gestión ${data.period}`;
+            pTag.style.backgroundColor = data.color + '22';
+            pTag.style.color = data.color;
+
             document.getElementById('detail-name').innerText = data.name;
             document.getElementById('detail-count').innerText = data.count;
             document.getElementById('detail-count').style.color = data.color;
-            document.getElementById('detail-start-date').innerText = data.start;
             document.getElementById('detail-start-ds').innerText = data.startDs;
-            document.getElementById('detail-end-date').innerText = data.end;
             document.getElementById('detail-end-ds').innerText = data.endDs;
 
             updateDonutChart(data);
@@ -225,20 +203,61 @@
                     labels: ['Economía', 'Social', 'Admin'],
                     datasets: [{
                         data: data.distribution,
-                        backgroundColor: ['#3b82f6', '#10b981', '#64748b'],
-                        hoverOffset: 10
+                        backgroundColor: ['#3b82f6', '#10b981', '#94a3b8'],
+                        borderWidth: 4,
+                        borderColor: '#ffffff'
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { 
-                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } },
-                        datalabels: { display: false } // Ocultar etiquetas de datos en la tarta
+                        legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } },
+                        datalabels: {
+                            color: '#fff', font: { weight: 'bold', size: 11 },
+                            formatter: (val) => val + '%'
+                        }
                     }
                 }
             });
         }
+
+        // --- FUNCIONES DE EXPORTACIÓN ---
+
+        function exportToPDF() {
+            const element = document.getElementById('capture-area');
+            const opt = {
+                margin: 0.5,
+                filename: `Ficha_Tecnica_${document.getElementById('detail-name').innerText}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function exportAllToExcel() {
+            const dataForExcel = presidentOrder.map(id => ({
+                Presidente: db[id].name,
+                Año: db[id].period,
+                'Total Decretos': db[id].count,
+                'DS Inicial': db[id].startDs,
+                'DS Final': db[id].endDs,
+                '% Economía': db[id].distribution[0] + '%',
+                '% Social': db[id].distribution[1] + '%',
+                '% Administrativo': db[id].distribution[2] + '%'
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(dataForExcel);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Decretos 40 Años");
+            XLSX.writeFile(workbook, "Gaceta_Analitica_Bolivia_1985_2026.xlsx");
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMacroChart();
+            buildSelectors();
+            updateDetailView('rpaz');
+        });
     </script>
 </body>
 </html>
