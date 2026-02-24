@@ -16,6 +16,8 @@
         body { font-family: 'Roboto', sans-serif; background-color: #f8fafc; color: #0f172a; }
         h1, h2, h3, h4, .serif { font-family: 'Merriweather', serif; }
         .chart-container-macro { position: relative; width: 100%; max-width: 1000px; margin: 0 auto; height: 500px; }
+        /* Ajuste para los botones con nombres largos */
+        .president-btn { min-width: 160px; text-align: center; line-height: 1.2; }
         .president-btn.active { background-color: #f1f5f9; border-bottom: 3px solid currentColor; font-weight: 700; }
         .scroll-hide-bar::-webkit-scrollbar { height: 6px; }
         .scroll-hide-bar::-webkit-scrollbar-track { background: #f1f5f9; }
@@ -33,7 +35,7 @@
                 </div>
                 <div class="flex gap-4">
                     <button onclick="exportAllToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-1.5 px-3 rounded transition">
-                        📊
+                         📊
                     </button>
                     <div class="hidden sm:block text-xs text-slate-500 uppercase tracking-widest font-semibold self-center">Datos Oficiales 1985 — 2026</div>
                 </div>
@@ -169,10 +171,11 @@
             presidentOrder.forEach(id => {
                 const p = db[id];
                 const btn = document.createElement('button');
-                btn.className = `president-btn flex-shrink-0 px-4 py-3 text-sm transition-all focus:outline-none`;
+                // Se eliminó .split(' ')[0] para mostrar el nombre completo
+                btn.className = `president-btn flex-shrink-0 px-4 py-3 text-[11px] transition-all focus:outline-none`;
                 btn.style.color = p.color;
                 btn.id = `btn-${id}`;
-                btn.innerHTML = `<span class="block font-bold">${p.name.split(' ')[0]}</span><span class="block text-xs opacity-75">${p.period}</span>`;
+                btn.innerHTML = `<span class="block font-bold">${p.name}</span><span class="block text-xs opacity-75">${p.period}</span>`;
                 btn.onclick = () => updateDetailView(id);
                 container.appendChild(btn);
             });
@@ -186,7 +189,6 @@
             document.getElementById('detail-period').innerText = `Gestión ${data.period}`;
             document.getElementById('detail-period').style.color = data.color;
             
-            // ASIGNACIÓN DEL NOMBRE COMPLETO
             document.getElementById('detail-name').innerText = data.name;
             
             document.getElementById('detail-count').innerText = data.count;
@@ -244,4 +246,4 @@
         document.addEventListener('DOMContentLoaded', () => { renderMacroChart(); buildSelectors(); updateDetailView('rpaz'); });
     </script>
 </body>
-</html>      
+</html>
