@@ -30,7 +30,7 @@
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2">
                     <img src="a.png" alt="Logotipo CenGOB" class="h-10 w-auto">
-                </div>
+                </div> 
                 <div class="flex gap-4">
                     <button onclick="exportAllToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-1.5 px-3 rounded transition">
                          📊 EXCEL
@@ -143,49 +143,72 @@
         let donutChartInstance = null;
 
         function renderMacroChart() {
-            const ctx = document.getElementById('macroChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: presidentOrder.map(id => db[id].name),
-                    datasets: [{
-                        data: presidentOrder.map(id => db[id].count),
-                        backgroundColor: presidentOrder.map(id => db[id].color + 'CC'),
-                        borderColor: presidentOrder.map(id => db[id].color),
-                        borderWidth: 2, borderRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        datalabels: { 
-                            anchor: 'end', 
-                            align: 'top', 
-                            offset: 5,
-                            formatter: (value) => value,
-                            font: function(context) {
-                                const val = context.dataset.data[context.dataIndex];
-                                if (val > 100 || val === 60) {
-                                    return { weight: 'bold', size: 16 };
-                                }
-                                return { weight: 'normal', size: 12 };
-                            },
-                            color: function(context) {
-                                const val = context.dataset.data[context.dataIndex];
-                                if (val > 100) return '#ef4444'; // Rojo
-                                if (val === 60) return '#10b981'; // Verde
-                                return '#1e293b';
-                            }
+    const ctx = document.getElementById('macroChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: presidentOrder.map(id => db[id].name),
+            datasets: [{
+                data: presidentOrder.map(id => db[id].count),
+                backgroundColor: presidentOrder.map(id => db[id].color + 'CC'),
+                borderColor: presidentOrder.map(id => db[id].color),
+                borderWidth: 2, 
+                borderRadius: 5,
+                // SOLUCIÓN 1: Evita que el dataset recorte los labels
+                clip: false 
+            }]
+        },
+        options: {
+            responsive: true, 
+            maintainAspectRatio: false,
+            layout: {
+                // SOLUCIÓN 2: Añadir un margen interno superior al lienzo
+                padding: {
+                    top: 30 
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                datalabels: { 
+                    anchor: 'end', 
+                    align: 'top', 
+                    offset: 5,
+                    formatter: (value) => value,
+                    font: function(context) {
+                        const val = context.dataset.data[context.dataIndex];
+                        if (val > 100 || val === 60) {
+                            return { weight: 'bold', size: 14 };
                         }
+                        return { weight: 'normal', size: 11 };
                     },
-                    scales: {
-                        y: { beginAtZero: true, grid: { display: false }, ticks: { display: false } },
-                        x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' }, maxRotation: 45, minRotation: 45 } }
+                    color: function(context) {
+                        const val = context.dataset.data[context.dataIndex];
+                        if (val > 100) return '#ef4444'; 
+                        if (val === 60) return '#10b981'; 
+                        return '#1e293b';
                     }
                 }
-            });
+            },
+            scales: {
+                y: { 
+                    beginAtZero: true, 
+                    grid: { display: false }, 
+                    ticks: { display: false },
+                    // SOLUCIÓN 3: Sugerir un máximo más alto para que quepan los números
+                    grace: '15%' 
+                },
+                x: { 
+                    grid: { display: false }, 
+                    ticks: { 
+                        font: { size: 10, weight: 'bold' }, 
+                        maxRotation: 45, 
+                        minRotation: 45 
+                    } 
+                }
+            }
         }
+    });
+}
 
         function buildSelectors() {
             const container = document.getElementById('president-selectors');
