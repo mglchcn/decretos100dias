@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparativa Histórica: 40 Años de Decretos Supremos</title>
+    <title>CENGOB: 40 Años de Decretos Supremos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
@@ -30,8 +30,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-amber-600 text-white flex items-center justify-center rounded font-bold serif">CH</div>
-                    <span class="text-xl font-bold serif tracking-tight">Comparativa<span class="text-amber-600">Histórica</span></span>
+                    <div class="w-8 h-8 bg-amber-600 text-white flex items-center justify-center rounded font-bold serif"> </div>
+                    <span class="text-xl font-bold serif tracking-tight">CEN<span class="text-amber-600">GOB</span></span>
                 </div>
                 <div class="flex gap-4">
                     <button onclick="exportAllToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-1.5 px-3 rounded transition">
@@ -69,7 +69,7 @@
                         La narrativa opositora que acusa al actual Presidente <strong>Rodrigo Paz Pereira</strong> de gobernar mediante abusos de Decretos Supremos queda completamente desestimada al revisar los correlativos históricos que se encuentran en la Gaceta Oficial del Estado.
                     </p>
                     <p class="text-slate-700 mb-4 text-sm leading-relaxed">
-                        Con <strong>60 decretos</strong> en sus primeros 100 días, la gestión de Rodrigo Paz es <strong>la segunda más baja de los últimos 40 años</strong>. Las cifras demuestran que presidentes como <strong>Carlos Mesa (113)</strong>, <strong>Jorge Quiroga (111)</strong>, <strong>Evo Morales (103)</strong> y <strong>Víctor Paz (101)</strong> emitieron prácticamente el doble de normativa por vía ejecutiva en el mismo lapso de tiempo, más de un decreto por día.
+                        Con <strong>60 decretos</strong> en sus primeros 100 días, la gestión de Rodrigo Paz es <strong>la segunda más baja de los últimos 40 años</strong>. Las cifras demuestran que 4 presidentes pasaron los 100 decretos, como <strong>Carlos Mesa (113)</strong>, <strong>Jorge Quiroga (111)</strong>, <strong>Evo Morales (103)</strong> y <strong>Víctor Paz (101)</strong> ya que emitieron prácticamente el doble de normativa por vía ejecutiva en el mismo lapso de tiempo.
                     </p>
                 </div>
                 
@@ -241,7 +241,7 @@
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Datos");
             XLSX.writeFile(wb, "Base_Datos_Decretos.xlsx");
-        }
+        } 
 
         document.addEventListener('DOMContentLoaded', () => { renderMacroChart(); buildSelectors(); updateDetailView('rpaz'); });
     </script>
