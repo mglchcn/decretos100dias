@@ -16,8 +16,7 @@
         body { font-family: 'Roboto', sans-serif; background-color: #f8fafc; color: #0f172a; }
         h1, h2, h3, h4, .serif { font-family: 'Merriweather', serif; }
         .chart-container-macro { position: relative; width: 100%; max-width: 1000px; margin: 0 auto; height: 500px; }
-        /* Ajuste para los botones con nombres largos */
-        .president-btn { min-width: 160px; text-align: center; line-height: 1.2; }
+        .president-btn { min-width: 200px; text-align: center; line-height: 1.2; }
         .president-btn.active { background-color: #f1f5f9; border-bottom: 3px solid currentColor; font-weight: 700; }
         .scroll-hide-bar::-webkit-scrollbar { height: 6px; }
         .scroll-hide-bar::-webkit-scrollbar-track { background: #f1f5f9; }
@@ -35,7 +34,7 @@
                 </div>
                 <div class="flex gap-4">
                     <button onclick="exportAllToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-1.5 px-3 rounded transition">
-                         📊
+                         📊 EXCEL
                     </button>
                     <div class="hidden sm:block text-xs text-slate-500 uppercase tracking-widest font-semibold self-center">Datos Oficiales 1985 — 2026</div>
                 </div>
@@ -156,7 +155,19 @@
                     responsive: true, maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        datalabels: { anchor: 'end', align: 'top', color: '#1e293b', font: { weight: 'bold', size: 12 } }
+                        datalabels: { 
+                            anchor: 'end', 
+                            align: 'top', 
+                            font: { weight: 'bold', size: 14 },
+                            formatter: (value) => value,
+                            color: function(context) {
+                                const val = context.dataset.data[context.dataIndex];
+                                // Valores > 100 en Rojo, 60 en Verde
+                                if (val > 100) return '#ef4444';
+                                if (val === 60) return '#10b981';
+                                return '#1e293b';
+                            }
+                        }
                     },
                     scales: {
                         y: { beginAtZero: true, grid: { display: false }, ticks: { display: false } },
@@ -171,7 +182,6 @@
             presidentOrder.forEach(id => {
                 const p = db[id];
                 const btn = document.createElement('button');
-                // Se eliminó .split(' ')[0] para mostrar el nombre completo
                 btn.className = `president-btn flex-shrink-0 px-4 py-3 text-[11px] transition-all focus:outline-none`;
                 btn.style.color = p.color;
                 btn.id = `btn-${id}`;
@@ -188,9 +198,7 @@
             
             document.getElementById('detail-period').innerText = `Gestión ${data.period}`;
             document.getElementById('detail-period').style.color = data.color;
-            
             document.getElementById('detail-name').innerText = data.name;
-            
             document.getElementById('detail-count').innerText = data.count;
             document.getElementById('detail-count').style.color = data.color;
             document.getElementById('detail-start-date').innerText = data.start;
@@ -241,7 +249,7 @@
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Datos");
             XLSX.writeFile(wb, "Base_Datos_Decretos.xlsx");
-        } 
+        }
 
         document.addEventListener('DOMContentLoaded', () => { renderMacroChart(); buildSelectors(); updateDetailView('rpaz'); });
     </script>
